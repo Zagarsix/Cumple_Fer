@@ -20,7 +20,7 @@ export default function Welcome({ onStart }) {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-end pb-20 bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/Welcome3.jpg')" }}
+      style={{ backgroundImage: "url('/images/Welcome2.jpg')" }}
     >
       <audio ref={audioRef} src="/audio/Happy-birthday.mp3" loop />
 
