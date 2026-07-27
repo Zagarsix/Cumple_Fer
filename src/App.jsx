@@ -8,9 +8,11 @@ import { questions, finalMessage } from "./data/questions";
 import { useUnlock } from "./hooks/useUnlock";
 
 const videos = [
-  { name: "Mamá", src: "/videos/mama.mp4" },
-  { name: "Papá", src: "/videos/papa.mp4" },
-  { name: "Abuela", src: "/videos/abuela.mp4" },
+  { name: "Ariane", src: "/videos/ariane.mp4" },
+  { name: "Vale", src: "/videos/vale.mp4" },
+  { name: "Sayita", src: "/videos/sayita.mp4" },
+  { name: "Tatita", src: "/videos/tata.mp4" },
+  { name: "Nanita", src: "/videos/nanita.mp4" },
   // ... agrega el resto aquí
 ];
 
