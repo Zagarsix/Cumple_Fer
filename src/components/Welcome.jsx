@@ -20,13 +20,13 @@ export default function Welcome({ onStart }) {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-end pb-20 bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/Welcome2.jpg')" }}
+      style={{ backgroundImage: "url('/images/Welcome4.jpg')" }}
     >
       <audio ref={audioRef} src="/audio/Happy-birthday.mp3" loop />
 
       <button
         onClick={onStart}
-        className="bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-bold text-xl py-4 px-8 rounded-full shadow-xl animate-pulse"
+        className="bg-yellow-400 hover:bg-yellow-500 text-purple-900 font-bold text-base sm:text-xl py-3 sm:py-4 px-6 sm:px-8 rounded-full shadow-xl animate-pulse mx-4 text-center"
       >
         ¿Quieres jugar? 🎉
       </button>
