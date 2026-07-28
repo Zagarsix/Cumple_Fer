@@ -6,7 +6,7 @@ export default function VideoGallery({ videos }) {
   return (
     <div className="max-w-2xl w-full mx-auto p-6 animate-fade-in">
       <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        Mensajes con mucho amor para ti 💕
+        Con mucho amor para ti 💕
       </h2>
 
       {activeVideo !== null ? (

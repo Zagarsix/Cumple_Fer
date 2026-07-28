@@ -1,12 +1,12 @@
 export default function Navbar({ activeView, unlocked, onNavigate }) {
   const tabs = [
     { key: "welcome", label: "Bienvenida", locked: false },
-    { key: "final", label: "Trivia", locked: !unlocked },
+    { key: "final", label: "Mensaje secreto", locked: !unlocked },
     { key: "videos", label: "Videos", locked: !unlocked },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur shadow-md z-50 flex justify-center gap-2 py-3">
+    <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur shadow-md z-50 flex flex-wrap justify-center gap-1 sm:gap-2 px-2 py-2 sm:py-3">
       {tabs.map((tab) => (
         <button
           key={tab.key}

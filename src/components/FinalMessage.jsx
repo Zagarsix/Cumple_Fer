@@ -5,7 +5,7 @@ export default function FinalMessage({ message, onContinue }) {
       style={{ backgroundImage: "url('/images/hija-final.jpg')" }}
     >
       <div className="max-w-md w-full mx-auto text-center animate-fade-in">
-        <div className="bg-white/90 backdrop-blur rounded-2xl shadow-lg p-8">
+        <div className="bg-white/30 backdrop-blur rounded-2xl shadow-lg p-8">
           <span className="text-5xl">🎂</span>
           <p className="text-xl font-semibold text-gray-800 mt-4 mb-6 leading-relaxed">
             {message}
