@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import confetti from "canvas-confetti";
+import { MUSIC_VOLUME } from "../audio";
 
 export default function Trivia({ questions, onComplete }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -8,11 +9,13 @@ export default function Trivia({ questions, onComplete }) {
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [showClown, setShowClown] = useState(false);
   const audioRef = useRef(null);
+  const sfxCtxRef = useRef(null);
 
   const currentQuestion = questions[currentIndex];
 
   useEffect(() => {
     const audio = audioRef.current;
+    audio.volume = MUSIC_VOLUME;
     audio.play().catch(() => {});
     return () => audio.pause();
   }, []);
@@ -21,6 +24,40 @@ export default function Trivia({ questions, onComplete }) {
     confetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
   };
 
+  const playTones = (notes, { type, volume }) => {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!sfxCtxRef.current) sfxCtxRef.current = new Ctx();
+      const ctx = sfxCtxRef.current;
+      if (ctx.state === "suspended") ctx.resume();
+
+      const now = ctx.currentTime;
+      notes.forEach(([freq, delay, duration]) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now + delay);
+        gain.gain.setValueAtTime(0.0001, now + delay);
+        gain.gain.exponentialRampToValueAtTime(volume, now + delay + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + delay + duration);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + duration + 0.05);
+      });
+    } catch {
+      // si el navegador no soporta Web Audio, solo quedan los efectos visuales
+    }
+  };
+
+  const playErrorSound = () =>
+    playTones([[330, 0, 0.3], [233, 0.2, 0.45]], { type: "sawtooth", volume: 0.55 });
+
+  const playSuccessSound = () =>
+    playTones(
+      [[523, 0, 0.18], [659, 0.09, 0.18], [784, 0.18, 0.22], [1047, 0.28, 0.5]],
+      { type: "triangle", volume: 0.5 }
+    );
+
   const handleSelect = (index) => {
     setSelected(index);
 
@@ -28,9 +65,10 @@ export default function Trivia({ questions, onComplete }) {
       setWrong(false);
       setWrongAttempts(0);
       launchConfetti();
+      playSuccessSound();
       setTimeout(() => {
         if (currentIndex === questions.length - 1) {
-          onComplete(); // se acaban las preguntas y avanza al meensaje final
+          onComplete();
         } else {
           setCurrentIndex((prev) => prev + 1);
           setSelected(null);
@@ -38,6 +76,7 @@ export default function Trivia({ questions, onComplete }) {
       }, 700);
     } else {
       setWrong(true);
+      playErrorSound();
       const attempts = wrongAttempts + 1;
       setWrongAttempts(attempts);
 
@@ -54,7 +93,7 @@ export default function Trivia({ questions, onComplete }) {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-purple-100 to-pink-100">
+    <div className="relative min-h-full flex items-center justify-center bg-gradient-to-b from-purple-100 to-pink-100">
       <audio ref={audioRef} src="/audio/Trivia-suspense.mp3" loop />
 
       {wrong && (
