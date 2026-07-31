@@ -1,15 +1,16 @@
 import { useEffect, useRef } from "react";
+import { MUSIC_VOLUME } from "../audio";
 
 export default function Welcome({ onStart }) {
   const audioRef = useRef(null);
 
   useEffect(() => {
     const audio = audioRef.current;
+    audio.volume = MUSIC_VOLUME;
     const tryPlay = () => audio.play().catch(() => {});
     tryPlay();
 
-    // Los navegadores bloquean el autoplay con sonido; esto lo activa
-    // apenas haya el primer click en cualquier parte de la pantalla
+    // activa el autoplay con sonido, en el primer click en cualquier parte de la pantalla
     window.addEventListener("click", tryPlay, { once: true });
     return () => {
       window.removeEventListener("click", tryPlay);
@@ -19,8 +20,9 @@ export default function Welcome({ onStart }) {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-end pb-20 bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/Welcome4.jpg')" }}
+      className="h-full flex flex-col items-center justify-end pb-10 bg-contain bg-top bg-no-repeat
+                 lg:pb-20 lg:bg-cover lg:bg-center"
+      style={{ backgroundImage: "url('/images/Welcome4.jpg')", backgroundColor: "#d9f0f8" }}
     >
       <audio ref={audioRef} src="/audio/Happy-birthday.mp3" loop />
 
