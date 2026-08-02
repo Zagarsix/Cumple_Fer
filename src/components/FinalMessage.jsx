@@ -8,10 +8,13 @@ const SLIDE_MS = 4000;
 const NINE_SIXTEEN = 9 / 16;
 const WIDE_THRESHOLD = 0.65;
 
+const TYPE_MS = 20; // velocidad del efecto de máquina de escribir (menor = más rápido)
+
 export default function FinalMessage({ message, photos, onContinue }) {
   const [index, setIndex] = useState(0);
   const [broken, setBroken] = useState([]);
   const [ratios, setRatios] = useState({});
+  const [typed, setTyped] = useState(0);
 
   const visible = photos.filter((src) => !broken.includes(src));
   const activeSrc = visible.length ? visible[index % visible.length] : null;
@@ -21,6 +24,13 @@ export default function FinalMessage({ message, photos, onContinue }) {
     const id = setInterval(() => setIndex((i) => (i + 1) % visible.length), SLIDE_MS);
     return () => clearInterval(id);
   }, [index, visible.length]); // el índice reinicia el contador tras un cambio manual
+
+  // el mensaje se va escribiendo letra por letra
+  useEffect(() => {
+    if (typed >= message.length) return;
+    const id = setTimeout(() => setTyped((t) => t + 1), TYPE_MS);
+    return () => clearTimeout(id);
+  }, [typed, message]);
 
   const go = (delta) =>
     setIndex((i) => (i + delta + visible.length) % visible.length);
@@ -36,14 +46,20 @@ export default function FinalMessage({ message, photos, onContinue }) {
     "absolute top-[30%] lg:top-1/2 -translate-y-1/2 z-10 grid h-10 w-10 place-items-center rounded-full bg-black/40 text-white text-xl backdrop-blur-sm transition-colors hover:bg-black/60";
 
   const card = (
-    <div className="bg-black/50 backdrop-blur-sm rounded-2xl shadow-lg p-5 sm:p-6 text-center lg:bg-white lg:shadow-xl">
-      <span className="text-4xl">🎂</span>
-      <p className="text-base sm:text-lg font-medium text-white mt-3 mb-5 leading-relaxed lg:text-gray-800 lg:text-xl">
-        {message}
+    <div className="bg-black/50 backdrop-blur-sm rounded-2xl shadow-lg p-4 text-center lg:bg-white lg:shadow-xl lg:p-6">
+      <span className="text-2xl lg:text-4xl">🎂</span>
+      <p className="text-sm leading-snug font-medium text-white mt-2 mb-3 lg:text-gray-800 lg:text-xl lg:leading-relaxed lg:mt-3 lg:mb-5">
+        {message.slice(0, typed)}
+        {typed < message.length && (
+          // cursor sin ancho, para que el texto no se mueva mientras se escribe
+          <span className="inline-block w-0 overflow-visible animate-pulse">▌</span>
+        )}
+        {/* el resto va invisible: reserva la altura final y evita que la tarjeta crezca */}
+        <span className="opacity-0">{message.slice(typed)}</span>
       </p>
       <button
         onClick={onContinue}
-        className="bg-pink-500 hover:bg-pink-600 text-white font-medium py-3 px-6 rounded-xl transition-colors"
+        className="bg-pink-500 hover:bg-pink-600 text-white font-medium py-2.5 px-5 text-sm rounded-xl transition-colors lg:py-3 lg:px-6 lg:text-base"
       >
         Ver mensajes de tu familia 💌
       </button>
@@ -119,7 +135,7 @@ export default function FinalMessage({ message, photos, onContinue }) {
         )}
 
         {/* En móvil y tablet el mensaje va sobrepuesto sobre las fotos */}
-        <div className="absolute inset-x-0 bottom-0 z-20 p-4 pb-10 animate-fade-in lg:hidden">
+        <div className="absolute inset-x-0 bottom-0 z-20 p-3 pb-5 animate-fade-in lg:hidden">
           <div className="mx-auto w-full max-w-sm">{card}</div>
         </div>
       </div>
