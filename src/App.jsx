@@ -15,7 +15,7 @@ const videos = [
   { name: "Tatita", src: "/videos/tata.mp4" },
   { name: "Nanita", src: "/videos/nanita.mp4" },
   { name: "Tío Jacob", src: "/videos/tio-jacob.mp4" },
-  { name: "Dany", src: "/videos/dany.mp4" },
+  { name: "Dany", src: "/videos/muchachita.mp4" },
   { name: "Papito", src: "/videos/papito.mp4" },
 ];
 
