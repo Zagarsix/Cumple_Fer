@@ -20,7 +20,7 @@ export default function Welcome({ onStart }) {
 
   return (
     <div
-      className="h-full flex flex-col items-center justify-end pb-10 bg-contain bg-top bg-no-repeat
+      className="h-full flex flex-col items-center justify-end pb-14 bg-[length:150%_auto] bg-top bg-no-repeat
                  lg:pb-20 lg:bg-cover lg:bg-center"
       style={{ backgroundImage: "url('/images/Welcome4.jpg')", backgroundColor: "#d9f0f8" }}
     >
